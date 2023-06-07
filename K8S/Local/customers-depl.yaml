@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers-depl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: customersservice
+  template:
+    metadata:
+      labels:
+        app: customersservice
+    spec:
+      containers:
+        - name: customersservice
+          image: gerhardt0011/customersservice:latest
+          resources:
+            limits:
+              cpu: "500m"
+            requests:
+              cpu: "100m"
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: customersservice
+  ports:
+    - name: customersservice
+      protocol: TCP
+      port: 80
+      targetPort: 80

@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: microservices
+build:
+  artifacts:
+    - image: gerhardt0011/customersservice
+      context: Customers/Customers.Service
+      docker:
+        dockerfile: Dockerfile
+    - image: gerhardt0011/identityservice
+      context: Identity/Identity.Service
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - K8S/Local/Identity-depl.yaml
+      - K8S/Local/customers-depl.yaml

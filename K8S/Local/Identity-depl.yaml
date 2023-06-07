@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-depl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: identityservice
+  template:
+    metadata:
+      labels:
+        app: identityservice
+    spec:
+      containers:
+        - name: identityservice
+          image: gerhardt0011/identityservice:latest
+          resources:
+            limits:
+              cpu: "500m"
+            requests:
+              cpu: "100m"
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: identityservice
+  ports:
+    - name: identityservice
+      protocol: TCP
+      port: 80
+      targetPort: 80

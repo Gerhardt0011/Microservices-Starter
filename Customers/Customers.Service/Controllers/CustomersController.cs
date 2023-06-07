@@ -1,0 +1,87 @@
+using AutoMapper;
+using Customers.Service.Contracts.Repositories;
+using Customers.Service.Dto.Customer;
+using Customers.Service.Models;
+using Customers.Service.Events;
+using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Customers.Service.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class CustomersController : ControllerBase
+{
+    private readonly  ICustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
+    private readonly IPublishEndpoint _publishEndpoint;
+
+    public CustomersController(ICustomerRepository customerRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
+    {
+        _customerRepository = customerRepository;
+        _mapper = mapper;
+        _publishEndpoint = publishEndpoint;
+    }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<CustomerReadDto>> GetCustomers()
+    {
+        return Ok(_mapper.Map<IEnumerable<CustomerReadDto>>(_customerRepository.GetAllCustomers()));
+    }
+    
+    [HttpGet("{id}", Name = "GetCustomer")]
+    public ActionResult<CustomerReadDto> GetCustomer(string id)
+    {
+        var customer = _customerRepository.GetCustomerById(id);
+        if (customer == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(_mapper.Map<CustomerReadDto>(customer));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CustomerReadDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
+    {
+        var customer = _customerRepository.CreateCustomer(_mapper.Map<Customer>(customerCreateDto));
+        
+        await _publishEndpoint.Publish(_mapper.Map<CustomerCreated>(customer));
+        
+        return CreatedAtRoute(
+            nameof(GetCustomer), 
+            new { id = customer.Id }, 
+            _mapper.Map<CustomerReadDto>(customer)
+        );
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult> UpdateCustomer(CustomerUpdateDto customerUpdateDto)
+    {
+        var customer = _customerRepository.GetCustomerById(customerUpdateDto.Id);
+        if (customer == null)
+        {
+            return NotFound();
+        }
+        
+        var updatedCustomer = _customerRepository.UpdateCustomer(_mapper.Map<Customer>(customerUpdateDto));
+        await _publishEndpoint.Publish(_mapper.Map<CustomerUpdated>(updatedCustomer));
+
+        return NoContent();
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCustomer(string id)
+    {
+        _customerRepository.DeleteCustomer(id);
+        await _publishEndpoint.Publish(new CustomerDeleted
+        {
+            Id = id
+        });
+        
+        return NoContent();
+    }
+}
