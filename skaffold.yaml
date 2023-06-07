@@ -5,11 +5,11 @@ metadata:
 build:
   artifacts:
     - image: gerhardt0011/customersservice
-      context: Customers/Customers.Service
+      context: Customers.Service
       docker:
         dockerfile: Dockerfile
     - image: gerhardt0011/identityservice
-      context: Identity/Identity.Service
+      context: Identity.Service
       docker:
         dockerfile: Dockerfile
 deploy:

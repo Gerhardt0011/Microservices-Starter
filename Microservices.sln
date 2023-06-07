@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Service", "Identity\Identity.Service\Identity.Service.csproj", "{F732D257-8C9C-446B-B07E-9AB5B3BA1ECF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Service", "Identity.Service\Identity.Service.csproj", "{F732D257-8C9C-446B-B07E-9AB5B3BA1ECF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{BD274CB1-3ADB-49C9-8E83-4E8578956A1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{392D4E29-7878-4381-8447-6D92DB483E70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Service", "Customers\Customers.Service\Customers.Service.csproj", "{62A8A588-952D-404D-B3CD-B4FC6B72051C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Service", "Customers.Service\Customers.Service.csproj", "{62A8A588-952D-404D-B3CD-B4FC6B72051C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5981BE5E-17B9-4192-9137-DF0F0A2A3893}"
 EndProject
