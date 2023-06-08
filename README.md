@@ -15,6 +15,18 @@ When making changes to services including the Web service, Skaffold will automat
 
 Live reload is also available for Web services out of the box.
 
+Before getting started, please ensure that you have deployed ingress-nginx, see docs here [Ingress-NGINX](https://kubernetes.github.io/ingress-nginx/)
+
+If you are running Docker destkop you can use the following deployment
+```shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+If you are using Minikube you can enable the ingress addon
+```shell
+minikube addons enable ingress
+```
+
 Apply Ingress Services and Persistent Layers
 
 ```shell
