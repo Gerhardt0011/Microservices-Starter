@@ -61,11 +61,14 @@ public class TeamsController : ControllerBase
     {
         var team = _mapper.Map<Team>(teamCreateDto);
 
-        var user = await _usersRepository.GetUserAsync(team.UserId);
+        var user = await _usersRepository.GetUserAsync(teamCreateDto.UserId);
 
         if (user == null)
         {
-            throw new ArgumentException("User does not exist");
+            return BadRequest(new
+            {
+                Error = "User does not exist."
+            });
         }
 
         team.Members.Add(user);
