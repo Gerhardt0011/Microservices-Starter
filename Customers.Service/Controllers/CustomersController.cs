@@ -8,6 +8,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace Customers.Service.Controllers;
 
@@ -28,9 +29,11 @@ public class CustomersController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<CustomerReadDto>> GetCustomers()
+    public ActionResult<PaginatedCustomerDto> GetCustomers(int page = 1, int limit = 10)
     {
-        return Ok(_mapper.Map<IEnumerable<CustomerReadDto>>(_customerRepository.GetAllCustomers()));
+        var customers = _customerRepository.GetCustomersPaged(FilterDefinition<Customer>.Empty, page, limit);
+
+        return Ok(_mapper.Map<PaginatedCustomerDto>(customers));
     }
 
     [HttpGet("{id}", Name = "GetCustomer")]

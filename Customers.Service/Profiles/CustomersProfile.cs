@@ -3,6 +3,7 @@ using Customers.Service.Dto.Customer;
 using Customers.Service.Models;
 using Customers.Service.Events;
 using Customers.Service.Contracts.Requests;
+using Common.Data;
 
 namespace Customers.Service.Profiles;
 
@@ -17,5 +18,7 @@ public class CustomersProfile : Profile
         // Event Mappings
         CreateMap<Customer, CustomerCreated>();
         CreateMap<Customer, CustomerUpdated>();
+
+        CreateMap<PaginatedCollection<Customer>, PaginatedCustomerDto>();
     }
 }
