@@ -7,10 +7,11 @@ public class TeamCreateDto
 {
     [Required]
     public string UserId { get; set; } = null!;
-    
+
     [Required]
     public string Name { get; set; } = null!;
-    
+
     [Required]
+    [EnumDataType(typeof(TeamType))]
     public TeamType Type { get; set; }
 }
