@@ -1,5 +1,6 @@
 using Common.Enums.Teams;
 using Common.Events.Teams;
+using Common.Models;
 
 namespace Teams.Service.Events;
 
@@ -13,5 +14,5 @@ public class TeamUpdated : ITeamUpdated
 
     public TeamType Type { get; set; }
 
-    public List<string> Members { get; set; } = null!;
+    public List<IModel> Members { get; set; } = null!;
 }

@@ -18,9 +18,11 @@ public class UsersRepository : IUsersRepository
         return await _users.Find(user => user.Id == userId).SingleOrDefaultAsync();
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task<User> CreateUserAsync(User user)
     {
         await _users.InsertOneAsync(user);
+
+        return user;
     }
 
     public async Task<bool> UserExistsAsync(string userId)

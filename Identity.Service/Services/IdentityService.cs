@@ -24,7 +24,6 @@ public class IdentityService : IIdentityService
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly TokenValidationParameters _tokenValidationParameters;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITeamsRepository _teamsRepository;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
@@ -34,8 +33,7 @@ public class IdentityService : IIdentityService
         IMapper mapper,
         IRefreshTokenRepository refreshTokenRepository,
         TokenValidationParameters tokenValidationParameters,
-        IHttpContextAccessor httpContextAccessor,
-        ITeamsRepository teamsRepository)
+        IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -45,7 +43,6 @@ public class IdentityService : IIdentityService
         _refreshTokenRepository = refreshTokenRepository;
         _tokenValidationParameters = tokenValidationParameters;
         _httpContextAccessor = httpContextAccessor;
-        _teamsRepository = teamsRepository;
     }
 
     public async Task<AuthenticationResult> RegisterAsync(User user)
@@ -69,14 +66,6 @@ public class IdentityService : IIdentityService
             };
         }
 
-        var team = await _teamsRepository.CreateTeamAsync(new Team
-        {
-            UserId = applicationUser.Id.ToString(),
-            Name = $"{applicationUser.FirstName}'s Team",
-            Members = new List<string> { applicationUser.Id.ToString() }
-        });
-
-        applicationUser.CurrentTeam = team.Id;
         await _userManager.UpdateAsync(applicationUser);
 
         return await GenerateAuthenticationResultForUserAsync(applicationUser);
@@ -225,11 +214,11 @@ public class IdentityService : IIdentityService
         var key = new RsaSecurityKey(rsa);
         var claims = new Claim[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email ?? string.Empty),
             new Claim("userId", applicationUser.Id.ToString()),
-            new Claim("teamId", applicationUser.CurrentTeam),
+            new Claim("teamId", applicationUser.CurrentTeam ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName ?? string.Empty),
         };
 
         var userRoles = applicationUser.Roles.ToList();
