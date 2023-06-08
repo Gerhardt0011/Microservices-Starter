@@ -20,5 +20,5 @@ deploy:
   kubectl:
     manifests:
       - K8S/Local/Identity-depl.yaml
-      - K8S/Local/customers-depl.yaml
       - K8S/Local/teams-depl.yaml
+      - K8S/Local/customers-depl.yaml

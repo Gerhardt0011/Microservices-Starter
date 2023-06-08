@@ -2,9 +2,11 @@ using Common;
 using Common.Identity;
 using Common.MassTransit;
 using Customers.Service.Contracts.Repositories;
+using Customers.Service.Data;
 using Customers.Service.Models;
 using Customers.Service.Repositories;
 using Customers.Service.Settings;
+using Customers.Service.SyncDataServices.Grpc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -29,6 +31,9 @@ var builder = WebApplication.CreateBuilder(args);
     // Register Repositories
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
+
+    // Register Sync Data Services
+    builder.Services.AddScoped<ITeamDataClient, TeamDataClient>();
 
     builder.Services.AddControllers();
 
@@ -64,6 +69,8 @@ var app = builder.Build();
     app.UseAuthorization();
 
     app.MapControllers();
+
+    PrepDb.PrepFromGrpc(app);
 }
 
 app.Run();

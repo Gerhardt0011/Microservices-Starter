@@ -59,11 +59,6 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
-    // app.UseEndpoints(endpoints =>
-    // {
-    //     endpoints.MapGrpcService<GrpcTeamService>();
-    // });
-
     app.MapGrpcService<GrpcTeamService>();
     app.MapGet("/protos/teams.proto", async context => await context.Response.WriteAsync(File.ReadAllText("Protos/teams.proto")));
 
