@@ -12,8 +12,13 @@ build:
       context: Identity.Service
       docker:
         dockerfile: Dockerfile
+    - image: gerhardt0011/teamsservice
+      context: Teams.Service
+      docker:
+        dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
       - K8S/Local/Identity-depl.yaml
       - K8S/Local/customers-depl.yaml
+      - K8S/Local/teams-depl.yaml

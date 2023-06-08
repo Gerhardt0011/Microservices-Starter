@@ -3,14 +3,14 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>3d37b9ab-6146-4e86-ae38-634e9d4f3dc6</UserSecretsId>
+        <UserSecretsId>c9d3fdad-72ad-4be1-b122-1c39caf7d67b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <!-- Replace with build package from Common -->
         <PackageReference Include="Gerhardt0011.MicroServices.Common" Version="1.0.1" />
 
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />        
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />

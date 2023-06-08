@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: teams-mongo
+  name: teams-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teams-mongo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: teams-mongo
+    spec:
+      containers:
+        - image: mongo:4.2.3
+          name: teams-mongo
+          args: ["--dbpath", "/data/db"]
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: teams-mongo-data-dir
+              mountPath: /data/db
+      volumes:
+        - name: teams-mongo-data-dir
+          persistentVolumeClaim:
+            claimName: teams-mongo-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: teams-mongo
+  name: teams-mongo-svc
+spec:
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+  selector:
+    app: teams-mongo
+  type: ClusterIP

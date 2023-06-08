@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teams-depl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: teamsservice
+  template:
+    metadata:
+      labels:
+        app: teamsservice
+    spec:
+      containers:
+        - name: teamsservice
+          image: gerhardt0011/teamsservice:latest
+          resources:
+            limits:
+              cpu: "500m"
+            requests:
+              cpu: "100m"
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teams-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: teamsservice
+  ports:
+    - name: teamsservice
+      protocol: TCP
+      port: 80
+      targetPort: 80

@@ -24,3 +24,10 @@ spec:
                 name: customers-clusterip-srv
                 port:
                   number: 80
+          - path: /api/teams
+            pathType: Prefix
+            backend:
+              service:
+                name: teams-clusterip-srv
+                port:
+                  number: 80
