@@ -22,13 +22,13 @@ public class TeamsController : ControllerBase
     private readonly IUsersRepository _usersRepository;
 
     public TeamsController(
-        ITeamsRepository teamsRepository,
         IMapper mapper,
+        ITeamsRepository teamsRepository,
         IPublishEndpoint publishEndpoint,
         IUsersRepository usersRepository)
     {
-        _teamsRepository = teamsRepository;
         _mapper = mapper;
+        _teamsRepository = teamsRepository;
         _publishEndpoint = publishEndpoint;
         _usersRepository = usersRepository;
     }

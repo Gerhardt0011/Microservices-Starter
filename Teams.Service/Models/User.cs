@@ -16,7 +16,10 @@ public class User : IModel
 
     [Required]
     public string LastName { get; set; } = null!;
-    
+
     [Required]
     public string Email { get; set; } = null!;
+
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string CurrentTeam { get; set; } = null!;
 }

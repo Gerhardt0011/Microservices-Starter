@@ -34,4 +34,9 @@ public class UsersRepository : IUsersRepository
     {
         await _users.DeleteOneAsync(user => user.Id == userId);
     }
+
+    public async Task UpdateUserAsync(User user)
+    {
+        await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+    }
 }

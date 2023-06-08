@@ -8,4 +8,5 @@ public interface IUsersRepository
     public Task<User> CreateUserAsync(User user);
     public Task<bool> UserExistsAsync(string userId);
     public Task DeleteUserAsync(string userId);
+    public Task UpdateUserAsync(User user);
 }
