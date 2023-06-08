@@ -1,22 +1,19 @@
 using System.Security.Cryptography;
 using Common;
 using Common.MassTransit;
+using Common.HealthChecks;
 using Identity.Service.Contracts.Repositories;
 using Identity.Service.Contracts.Services;
-using Identity.Service.HealthChecks;
 using Identity.Service.Models;
 using Identity.Service.Repositories;
 using Identity.Service.Services;
 using Identity.Service.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -92,16 +89,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
 
-    builder.Services.AddHealthChecks()
-        .Add(new HealthCheckRegistration(
-            name: "MongoDb",
-            factory: sp => new MongoDbHealthCheck(
-                new MongoClient(mongoDbSettings.ConnectionString)
-            ),
-            failureStatus: HealthStatus.Unhealthy,
-            tags: new[] { "ready" },
-            timeout: TimeSpan.FromSeconds(5)
-        ));
+    builder.Services.AddMongoDbHealthCheck(mongoDbSettings.ConnectionString);
 }
 
 var app = builder.Build();
@@ -118,15 +106,7 @@ var app = builder.Build();
 
     app.MapControllers();
 
-    app.UseHealthChecks("/health", new HealthCheckOptions
-    {
-        Predicate = _ => false
-    });
+    app.MapServiceHealthChecks();
 
-    app.UseHealthChecks("/health/ready", new HealthCheckOptions
-    {
-        Predicate = check => check.Tags.Contains("ready"),
-    });
+    app.Run();
 }
-
-app.Run();

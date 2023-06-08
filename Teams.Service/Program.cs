@@ -1,4 +1,5 @@
 using Common;
+using Common.HealthChecks;
 using Common.Identity;
 using Common.MassTransit;
 using Microsoft.OpenApi.Models;
@@ -49,6 +50,8 @@ var builder = WebApplication.CreateBuilder(args);
 
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
+
+    builder.Services.AddMongoDbHealthCheck(mongoDbSettings.ConnectionString);
 }
 
 var app = builder.Build();
@@ -69,6 +72,8 @@ var app = builder.Build();
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.MapServiceHealthChecks();
 
     app.Run();
 }

@@ -1,4 +1,5 @@
 using Common;
+using Common.HealthChecks;
 using Common.Identity;
 using Common.MassTransit;
 using Customers.Service.Contracts.Repositories;
@@ -52,6 +53,8 @@ var builder = WebApplication.CreateBuilder(args);
 
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
+
+    builder.Services.AddMongoDbHealthCheck(mongoDbSettings.ConnectionString);
 }
 
 var app = builder.Build();
@@ -71,6 +74,8 @@ var app = builder.Build();
     app.MapControllers();
 
     PrepDb.PrepFromGrpc(app);
+
+    app.MapServiceHealthChecks();
 }
 
 app.Run();
