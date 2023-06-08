@@ -29,7 +29,7 @@ public class TeamsRepository : ITeamsRepository
             throw new ArgumentNullException(nameof(team));
 
         await _teams.InsertOneAsync(team);
-        
+
         return team;
     }
 
@@ -37,7 +37,7 @@ public class TeamsRepository : ITeamsRepository
     {
         if (team == null)
             throw new ArgumentNullException(nameof(team));
-        
+
         await _teams.ReplaceOneAsync(t => t.Id == team.Id, team);
     }
 
