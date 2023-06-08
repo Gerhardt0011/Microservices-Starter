@@ -12,14 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 {
     // Import the configuration from the appsettings.json file.
     var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-    
+
     builder.Services.AddMongo();
     builder.Services.RegisterMongoDbCollection<Customer>(mongoDbSettings!.CustomersCollectionName);
-    builder.Services.RegisterMongoDbCollection<User>(mongoDbSettings!.UsersCollectionName);
-    
+    builder.Services.RegisterMongoDbCollection<Team>(mongoDbSettings!.TeamsCollectionName);
+
     // Add MassTransit
     builder.Services.AddMassTransitWithRabbitMq();
-    
+
     // Setup Authentication
     builder.Services.AddJwtBearerAuthentication();
 
@@ -28,13 +28,13 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Register Repositories
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-    builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-    
+    builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
+
     builder.Services.AddControllers();
-    
+
     // Register Swagger UI
     builder.Services.AddEndpointsApiExplorer();
-    
+
     builder.Services.AddSwaggerGen(options =>
     {
         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -44,7 +44,7 @@ var builder = WebApplication.CreateBuilder(args);
             In = ParameterLocation.Header,
             Type = SecuritySchemeType.ApiKey
         });
-        
+
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
 }

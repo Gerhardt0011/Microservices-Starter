@@ -50,6 +50,7 @@ public class UserRegistered : IConsumer<IUserRegistered>
         team.Members = new List<User> { user };
         await _teamsRepository.UpdateTeamAsync(team);
 
+        await _publishEndpoint.Publish(_mapper.Map<TeamCreated>(team));
         await _publishEndpoint.Publish(new TeamSwitched
         {
             UserId = user.Id.ToString(),
