@@ -7,6 +7,7 @@ using Teams.Service.Contracts.Repositories;
 using Teams.Service.Models;
 using Teams.Service.Repositories;
 using Teams.Service.Settings;
+using Teams.Service.SyncDataServices.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -30,6 +31,8 @@ var builder = WebApplication.CreateBuilder(args);
     // Register Repositories
     builder.Services.AddScoped<IUsersRepository, UsersRepository>();
     builder.Services.AddScoped<ITeamsRepository, TeamsRepository>();
+
+    builder.Services.AddGrpc();
 
     builder.Services.AddControllers();
 
@@ -55,6 +58,14 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    // app.UseEndpoints(endpoints =>
+    // {
+    //     endpoints.MapGrpcService<GrpcTeamService>();
+    // });
+
+    app.MapGrpcService<GrpcTeamService>();
+    app.MapGet("/protos/teams.proto", async context => await context.Response.WriteAsync(File.ReadAllText("Protos/teams.proto")));
 
     app.UseHttpsRedirection();
 

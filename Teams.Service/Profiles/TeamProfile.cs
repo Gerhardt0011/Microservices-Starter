@@ -12,9 +12,12 @@ public class TeamProfile : Profile
         CreateMap<TeamCreateDto, Team>();
         CreateMap<TeamUpdateDto, Team>();
         CreateMap<Team, TeamReadDto>();
-        
+
         // Event Mappings
         CreateMap<Team, TeamCreated>();
         CreateMap<Team, TeamUpdated>();
+
+        // Grpc Mappings
+        CreateMap<Team, GrpcTeamModel>();
     }
 }
