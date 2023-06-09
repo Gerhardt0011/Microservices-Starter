@@ -19,7 +19,15 @@ using Common.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    var seqSettings = builder.Configuration
+        .GetSection(nameof(SeqSettings))
+        .Get<SeqSettings>();
+
     builder.Logging.AddJsonLogging();
+    builder.Services.AddLogging(builder =>
+    {
+        builder.AddSeq(serverUrl: seqSettings!.ServerUrl);
+    });
 
     BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
