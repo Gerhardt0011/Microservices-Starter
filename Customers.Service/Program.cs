@@ -2,6 +2,7 @@ using Common;
 using Common.HealthChecks;
 using Common.Identity;
 using Common.MassTransit;
+using Common.Logging;
 using Customers.Service.Contracts.Repositories;
 using Customers.Service.Data;
 using Customers.Service.Models;
@@ -13,7 +14,8 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    // Import the configuration from the appsettings.json file.
+    builder.Logging.AddJsonLogging();
+
     var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
 
     builder.Services.AddMongo();

@@ -15,10 +15,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Swashbuckle.AspNetCore.Filters;
+using Common.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String)); // not sure if this is optimal
+    builder.Logging.AddJsonLogging();
+
+    BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 
     var mongoDbSettings = builder.Configuration
         .GetSection(nameof(MongoDbSettings))

@@ -1,6 +1,7 @@
 using Common;
 using Common.HealthChecks;
 using Common.Identity;
+using Common.Logging;
 using Common.MassTransit;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -12,6 +13,8 @@ using Teams.Service.SyncDataServices.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Logging.AddJsonLogging();
+
     var mongoDbSettings = builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
     var jwtSettings = builder.Configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
 
