@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teams-depl
+  namespace: microservice
 spec:
   replicas: 1
   revisionHistoryLimit: 0
@@ -12,6 +13,7 @@ spec:
     metadata:
       labels:
         app: teamsservice
+      namespace: microservice
     spec:
       containers:
         - name: teamsservice
@@ -42,6 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: teams-clusterip-srv
+  namespace: microservice
 spec:
   type: ClusterIP
   selector:

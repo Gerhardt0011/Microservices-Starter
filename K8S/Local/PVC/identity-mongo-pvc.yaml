@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: identity-mongo-data-pv
+  namespace: microservice
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,6 +15,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: identity-mongo-data
+  namespace: microservice
 spec:
   accessModes:
     - ReadWriteOnce

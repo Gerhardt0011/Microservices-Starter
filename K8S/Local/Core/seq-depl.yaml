@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: seq-depl
+  namespace: microservice
 spec:
   replicas: 1
   revisionHistoryLimit: 0
@@ -28,6 +29,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: seq-clusterip-srv
+  namespace: microservice
 spec:
   type: ClusterIP
   selector:
